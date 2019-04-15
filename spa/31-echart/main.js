@@ -3,11 +3,17 @@ $(function(){
       yData = [];
 
 for(var p = 0;p<=1;p+=0.1){
-  xData.push(p);
-  yData.push(h(p));
+  xData.push(roundFractional(p,1));
+  yData.push(roundFractional(h(p),2));
 }
+
+function roundFractional(x, n) {
+  return Math.round(x * Math.pow(10, n)) / Math.pow(10, n);
+        
+}
+
 function h(p){
-  return -1 * p * Math.log2(p) * Math.log2(1-p);
+  return -1 * (plog(p) + plog(1 - p));
 }
 
 
@@ -19,21 +25,26 @@ function h(p){
     },
     tooltip: {},
     legend: {
-      data:['销量']
+      data:['信息量']
     
     },
     xAxis: {
-      data: ['衬衫','羊毛衫','雪纺衫','裤子','高跟鞋','袜子']
+      data: xData
     
     },
     yAxis: {},
     series: [{
-      name: '销量',
-      type: 'bar',
-      data: [5, 20, 36, 10, 10, 20]
+      name: '信息量',
+      type: 'line',
+      smooth:'true',
+      data: yData
                     
     }]
 
   };
   myChart.setOption(option);
+  function plog(p) {
+    return (p === 0)? 0 : p * Math.log2(p);
+          
+  }
 });
